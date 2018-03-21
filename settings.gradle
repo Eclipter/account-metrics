@@ -1,0 +1,8 @@
+rootProject.name = 'account-metrics'
+include 'notification-service'
+include 'statistics-service'
+include 'registry'
+include 'gateway'
+include 'auth-service'
+include 'accounting-service'
+
