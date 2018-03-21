@@ -1,0 +1,30 @@
+group = group
+version = version
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven { url 'http://repo.spring.io/milestone/' }
+}
+
+dependencies {
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: springCloudVersion
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zuul', version: springCloudVersion
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
