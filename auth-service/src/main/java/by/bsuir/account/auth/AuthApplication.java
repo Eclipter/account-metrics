@@ -92,7 +92,7 @@ public class AuthApplication {
 					.authorizedGrantTypes("refresh_token", "password")
 					.scopes("ui")
 			.and()
-					.withClient("account-service")
+					.withClient("accounting-service")
 					.secret(env.getProperty("ACCOUNT_SERVICE_PASSWORD"))
 					.authorizedGrantTypes("client_credentials", "refresh_token")
 					.scopes("server")
