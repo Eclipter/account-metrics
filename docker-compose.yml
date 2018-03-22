@@ -2,47 +2,108 @@ version: '2.1'
 services:
 
   registry:
-    build: registry
+    image: bsuir/metrics-registry
+    restart: always
+    ports:
+      - 8172:8172
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   gateway:
-    build: gateway
+    image: bsuir/metrics-gateway
+    restart: always
+    ports:
+      - 80:4000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   auth-service:
-    build: auth-service
-    ports:
-      - 9044:9044
+    environment:
+      NOTIFICATION_SERVICE_PASSWORD: famcsn
+      STATISTICS_SERVICE_PASSWORD: famcss
+      ACCOUNT_SERVICE_PASSWORD: famcsa
+      MONGODB_PASSWORD: famcsm
+    image: bsuir/metrics-auth-service
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   auth-mongodb:
-    build: mongodb
-    ports:
-      - 25000:27017
+    environment:
+      MONGODB_PASSWORD: famcsm
+    image: bsuir/metrics-mongodb
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   accounting-service:
-    build: accounting-service
-    ports:
-      - 9008:9008
+    environment:
+      ACCOUNT_SERVICE_PASSWORD: famcsa
+      MONGODB_PASSWORD: famcsm
+    image: bsuir/metrics-accounting-service
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   accounting-mongodb:
-    build: mongodb
-    ports:
-      - 26000:27017
+    environment:
+      INIT_DUMP: account-service-dump.js
+      MONGODB_PASSWORD: famcsm
+    image: bsuir/metrics-mongodb
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   statistics-service:
-    build: statistics-service
-    ports:
-      - 9009:9009
+    environment:
+      MONGODB_PASSWORD: famcsm
+      STATISTICS_SERVICE_PASSWORD: famcss
+    image: bsuir/metrics-statistics-service
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   statistics-mongodb:
-    build: mongodb
-    ports:
-      - 27000:27017
+    environment:
+      MONGODB_PASSWORD: famcsm
+    image: bsuir/metrics-mongodb
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   notification-service:
-    build: notification-service
-    ports:
-      - 9006:9006
+    environment:
+      MONGODB_PASSWORD: famcsm
+      NOTIFICATION_SERVICE_PASSWORD: famcsn
+    image: bsuir/metrics-notification-service
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   notification-mongodb:
-    build: mongodb
-    ports:
-      - 28000:27017
+    image: bsuir/metrics-mongodb
+    restart: always
+    environment:
+      MONGODB_PASSWORD: famcsm
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
