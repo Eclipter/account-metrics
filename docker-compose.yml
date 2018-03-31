@@ -5,7 +5,7 @@ services:
     image: bsuir/metrics-registry
     restart: always
     ports:
-      - 8172:8172
+      - 8761:8761
     logging:
       options:
         max-size: "10m"
