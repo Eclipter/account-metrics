@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 @SpringBootApplication
 @EnableResourceServer
@@ -59,6 +60,18 @@ public class AccountApplication extends ResourceServerConfigurerAdapter {
 	@Bean
 	public ResourceServerTokenServices tokenServices() {
 		return new CustomUserInfoTokenServices(sso.getUserInfoUri(), sso.getClientId());
+	}
+
+	@Bean
+	public CommonsRequestLoggingFilter logFilter() {
+		CommonsRequestLoggingFilter filter
+				= new CommonsRequestLoggingFilter();
+		filter.setIncludeQueryString(true);
+		filter.setIncludePayload(true);
+		filter.setMaxPayloadLength(10000);
+		filter.setIncludeHeaders(false);
+		filter.setAfterMessagePrefix("REQUEST DATA : ");
+		return filter;
 	}
 
 	@Override

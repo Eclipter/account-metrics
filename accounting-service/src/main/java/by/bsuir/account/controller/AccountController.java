@@ -32,7 +32,7 @@ public class AccountController {
 		accountService.saveChanges(principal.getName(), account);
 	}
 
-	@RequestMapping(path = "/", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public Account createNewAccount(@Valid @RequestBody User user) {
 		return accountService.create(user);
 	}
