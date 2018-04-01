@@ -71,6 +71,8 @@ public class AuthApplication {
 
 		private TokenStore tokenStore = new InMemoryTokenStore();
 
+		private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
 		@Autowired
 		@Qualifier("authenticationManagerBean")
 		private AuthenticationManager authenticationManager;
@@ -93,17 +95,17 @@ public class AuthApplication {
 					.scopes("ui")
 			.and()
 					.withClient("accounting-service")
-					.secret(env.getProperty("ACCOUNT_SERVICE_PASSWORD"))
+					.secret(passwordEncoder.encode(env.getProperty("ACCOUNT_SERVICE_PASSWORD")))
 					.authorizedGrantTypes("client_credentials", "refresh_token")
 					.scopes("server")
 			.and()
 					.withClient("statistics-service")
-					.secret(env.getProperty("STATISTICS_SERVICE_PASSWORD"))
+					.secret(passwordEncoder.encode(env.getProperty("STATISTICS_SERVICE_PASSWORD")))
 					.authorizedGrantTypes("client_credentials", "refresh_token")
 					.scopes("server")
 			.and()
 					.withClient("notification-service")
-					.secret(env.getProperty("NOTIFICATION_SERVICE_PASSWORD"))
+					.secret(passwordEncoder.encode(env.getProperty("NOTIFICATION_SERVICE_PASSWORD")))
 					.authorizedGrantTypes("client_credentials", "refresh_token")
 					.scopes("server");
 			// @formatter:on
@@ -121,7 +123,8 @@ public class AuthApplication {
 		public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
 			oauthServer
 					.tokenKeyAccess("permitAll()")
-					.checkTokenAccess("isAuthenticated()");
+					.checkTokenAccess("isAuthenticated()")
+					.passwordEncoder(new BCryptPasswordEncoder());
 		}
 	}
 }
